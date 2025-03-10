@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: ${namespace}-postgres-configuration
+  namespace: ${namespace}
+stringData:
+  host: ${postgresserver}
+  port: "5432"
+  database: ${postgresdb}
+  username: ${postgresuser}
+  password: ${postgrespwd}
+  sslmode: prefer
+  type: unmanaged
+type: Opaque
