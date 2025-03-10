@@ -4,7 +4,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: {namespace}-postgres-configuration
-  namespace: ${namespace}
+  namespace: {namespace}
 stringData:
   host: {postgresserver}
   port: {postgresport}
