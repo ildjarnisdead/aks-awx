@@ -3,18 +3,18 @@ apiVersion: v1
 kind: Secret
 type: Opaque
 metadata:
-  name: ${dnszone}-secret
+  name: {dnszone}-dns-secret
   namespace: cert-manager
 stringData:
-  client-secret: ${clientsecret}
+  client-secret: {clientsecret}
 ---
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:
-  name: ${dnszone}-clusterissuer
+  name: {dnszone}-clusterissuer
 spec:
   acme:
-    email: $letsencryptaddress
+    email: {letsencryptaddress}
     # staging
     server: https://acme-staging-v02.api.letsencrypt.org/directory
     # production
@@ -26,11 +26,11 @@ spec:
       - dns01:
           azureDNS:
             environment: AzurePublicCloud
-            subscriptionID: ${subscriptionId}
-            resourceGroupName: ${dnsresourcegroup}
-            hostedZoneName: ${dnszone}
-            tenantID: ${tenantid}
-            clientID: ${appid}
+            subscriptionID: {subscriptionId}
+            resourceGroupName: {dnsresourcegroup}
+            hostedZoneName: {dnszone}
+            tenantID: {tenantid}
+            clientID: {appid}
             clientSecretSecretRef:
-              name: ${dnszone}-dns-secret
+              name: {dnszone}-dns-secret
               key: client-secret

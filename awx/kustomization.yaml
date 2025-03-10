@@ -4,4 +4,4 @@ kind: Kustomization
 resources:
   - postgres.yaml
   - awx.yaml
-namespace: ${namespace}
+namespace: {namespace}
