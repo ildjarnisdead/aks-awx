@@ -42,23 +42,23 @@ Create an info sheet with the following items, the values will be filled in duri
 | AWX operator version                | awxoperator       |       |
 | AWX replica count                   | replicacount      |       |
 | AWX servicename                     | servicename       |       |
-| App registration ID                 | appId             |       |
-| App registration Secret             | appSecret         |       |
-| App registration Tenant ID          | tenantId          |       |
+| App registration ID                 | appid             |       |
+| App registration Secret             | appsecret         |       |
+| App registration Tenant ID          | tenantid          |       |
 | Azure AWX resource group            | awxrg             |       |
 | Azure infrastructure resource group | infrarg           |       |
 | Cert manager version                | certmgr           |       |
 | DNS zone name                       | dnszone           |       |
-| DNS zone subscription ID            | dnssubscriptionId |       |
+| DNS zone subscription ID            | dnssubscriptionid |       |
 | Kubernetes cluster name             | kubecluster       |       |
 | PostgreSQL admin password           | pgdminpwd         |       |
 | PostgreSQL admin user               | pgadmin           |       |
 | PostgreSQL server name              | pgserver          |       |
 | PostgreSQL user password            | pguserpwd         |       |
 
-In the rest of the documentation and files, I will use **[configname]** which should be replaced with the value from this table.
-
 **Table 1:** Custom properties
+
+In the rest of the documentation and files, I will use **[configname]** which should be replaced with the value from this table.
 
 ## AWX
 
@@ -243,8 +243,19 @@ watch kubectl get awx,all,ingress,secrets -n [servicename]
 
 ## Get the deployment files
 
-Clone https://github.com/ildjarnisdead/aks-awx
+Clone the repo: `git clone https://github.com/ildjarnisdead/aks-awx`
+
 Create a copy of the aks-awx directory with the name of your installation (`[servicename]`) and go to this directory.
+
+## Fill in all the config variables
+
+For every config option, use the following bash line to update the values in the deployment files:
+
+```bash
+find . -name \*.yml -exec sed 's/[configname]/[configvalue]/' {} \+
+```
+
+E.g. `find . -name \*.yml -exec sed 's/replicacount/2/' {} \+` to set the replicacount to 2.
 
 ## Cert manager
 
