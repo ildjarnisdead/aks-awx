@@ -1,21 +1,12 @@
 ---
-apiVersion: v1
-kind: Secret
-metadata:
-  name: {namespace}-secret-key
-  namespace: {namespace}
-stringData:
-  secret_key: SomethingVerySecret
-type: Opaque
----
 apiVersion: awx.ansible.com/v1beta1
 kind: AWX
 metadata:
-  name: {namespace}
-  namespace: {namespace}
+  name: "[servicename]"
+  namespace: "[servicename]"
 spec:
-  replicas: {replicacount}
+  replicas: [replicacount]
   service_type: nodeport
-  postgres_configuration_secret: {namespace}-postgres-configuration
-  hostname: {dnsname}.{dnszone}
-  secret_key_secret: {namespace}-secret-key
+  postgres_configuration_secret: "[servicename]-postgres-configuration"
+  hostname: "[servicename].[dnszone]"
+  secret_key_secret: "[servicename]-secret-key"
