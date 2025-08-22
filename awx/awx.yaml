@@ -2,11 +2,11 @@
 apiVersion: awx.ansible.com/v1beta1
 kind: AWX
 metadata:
-    name: "[servicename]"
-    namespace: "[servicename]"
+  name: "[servicename]"
+  namespace: "[servicename]"
 spec:
-    replicas: [replicacount]
-    service_type: nodeport
-    postgres_configuration_secret: "[servicename]-postgres-configuration"
-    hostname: "[servicename].[dnszone]"
-    secret_key_secret: "[servicename]-secret-key"
+  replicas: [replicacount]
+  service_type: nodeport
+  postgres_configuration_secret: "[servicename]-postgres-configuration"
+  hostname: "[servicename].[dnszone]"
+  secret_key_secret: "[servicename]-secret-key"
