@@ -252,10 +252,10 @@ Create a copy of the aks-awx directory with the name of your installation (`[ser
 For every config option, use the following bash line to update the values in the deployment files:
 
 ```bash
-find . -name \*.yml -exec sed 's/[configname]/[configvalue]/' {} \+
+find . -name \*.yaml -exec sed 's/[configname]/[configvalue]/' {} \+
 ```
 
-E.g. `find . -name \*.yml -exec sed 's/replicacount/2/' {} \+` to set the replicacount to 2.
+E.g. `find . -name \*.yaml -exec sed 's/replicacount/2/' {} \+` to set the replicacount to 2.
 
 ## Cert manager
 
