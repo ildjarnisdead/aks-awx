@@ -5,7 +5,7 @@ metadata:
     name: "[servicename]-postgres-configuration"
     namespace: "[servicename]"
 stringData:
-    host: "[pgserver]"
+    host: "[pgserver].postgres.database.azure.com"
     port: "5432"
     database: "[servicename]"
     username: "[servicename]"

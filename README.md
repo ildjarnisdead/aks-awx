@@ -125,7 +125,6 @@ For the lab I chose the following ranges:
 | SNET-VMS        | 10.0.0.0/24  |
 | SNET-POSTGRES   | 10.0.1.0/28  |
 | SNET-KUBERNETES | 10.0.16.0/20 |
-| SNET-APPGW      | 10.0.32.0/20 |
 
 **Table 2:** IP ranges for virtual network and subnets
 
@@ -189,7 +188,7 @@ Create an AKS cluster to the `[awxrg]` resource group with the following options
     -   Choose a service range that does not overlap with any other network. I used 10.1.0.0/16. Don't forget to update the DNS IP address to be in this range
     -   Azure network policy
 
-After the cluster is created, an application gateway ingress controller should be added in Settings - Networking - Virtual. Click on 'create new' to create a new subnet.
+After the cluster is created, an application gateway ingress controller should be added in Settings - Networking - Virtual. Click on 'create new' to create a new subnet. A /26 subnet should be enough.
 
 Note that creating the AG can take a long (30+ minutes) time.
 
