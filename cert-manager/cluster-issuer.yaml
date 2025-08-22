@@ -17,11 +17,11 @@ spec:
       - dns01:
           azureDNS:
             environment: AzurePublicCloud
-            subscriptionID: "[dnssubscriptionId]"
+            subscriptionID: "[dnssubscriptionid]"
             resourceGroupName: "[infrarg]"
             hostedZoneName: "[dnszone]"
-            tenantID: "[tenantId]"
-            clientID: "[appId]"
+            tenantID: "[tenantid]"
+            clientID: "[appid]"
             clientSecretSecretRef:
               name: "[dnszone]-dns-secret"
               key: client-secret
