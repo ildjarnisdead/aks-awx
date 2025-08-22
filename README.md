@@ -266,11 +266,9 @@ kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/
 
 ## Cluster issuer
 
-Edit the files in the cert-manager/ subdirectory and replace all variables enclosed in [] with the correct values for your installation. See the info sheet for the variable names.
-
 While testing I would suggest the staging server, don't use the prodution server for tests. Once you're ready, you can switch to the production server.
 
-Create the cluster issuer:
+Create the cluster issuer for `[dnsname]`, if it doesn't exist yet:
 
 ```bash
 kubectl apply -k cert-manager
@@ -318,7 +316,7 @@ kubectl apply -k ingress/
 
 Check the monitoring screen, the ingress should show the public IP address of the application gateway.
 
-Also check the secrets, there should be an `awxdev-certificate` secret of type `kubernetes.io/tls`. If there's only an opaque secret `awxdev-certificate-[randomletters]` then something is wrong with the certificate issuance. See https://cert-manager.io/docs/troubleshooting/ for troubleshooting steps.
+Also check the secrets, there should be an `[servicename]-certificate` secret of type `kubernetes.io/tls`. If there's only an opaque secret `[servicename]-certificate-[randomletters]` then something is wrong with the certificate issuance. See https://cert-manager.io/docs/troubleshooting/ for troubleshooting steps.
 
 # Testing the server
 
@@ -333,3 +331,24 @@ In order to get the initial admin password, you can use :
 ```bash
 kubectl -n [servicename] get secret awxdev-admin-password -o jsonpath="{.data.password}" | base64 --decode ; echo
 ```
+
+If this password does not work, you can manually reset the password:
+
+Log in in one of the web pods:
+
+```bash
+kubectl exec -n [servicename] `kubectl -n [servicename] get pod | grep [servicename]-web -m 1 | cut -f1 -d " "` -it -- /bin/sh
+```
+
+Next, change the password of the admin user:
+```bash
+awx-manage changepassword admin
+```
+
+# Change the certificate to production use
+
+If you chose the Let's Encrypt staging server you can switch over to the production server:
+
+- Edit `cert-manager/cluster-issuer.yaml`, add a `#` in front of the staging server line, and remove the `#` from the production server line.
+- Reconfigure the cluster issuer: `kubectl apply -k cert-manager`
+- Delete the certificate secret: `kubectl -n [servicename] delete secret [servicename]-certificate`. After a few seconds, the new certificate will be issued.
