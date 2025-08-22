@@ -1,16 +1,15 @@
-
 ---
 apiVersion: v1
 kind: Secret
 metadata:
-  name: "[servicename]-postgres-configuration"
-  namespace: "[servicename]"
+    name: "[servicename]-postgres-configuration"
+    namespace: "[servicename]"
 stringData:
-  host: "[pgserver]"
-  port: "5432"
-  database: "[servicename]"
-  username: "[servicename]"
-  password: "[pguserpwd]"
-  sslmode: prefer
-  type: unmanaged
+    host: "[pgserver]"
+    port: "5432"
+    database: "[servicename]"
+    username: "[servicename]"
+    password: "[pguserpwd]"
+    sslmode: prefer
+    type: unmanaged
 type: Opaque

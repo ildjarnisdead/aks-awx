@@ -47,6 +47,7 @@ Create an info sheet with the following items, the values will be filled in duri
 | App registration Tenant ID          | tenantid          |       |
 | Azure AWX resource group            | awxrg             |       |
 | Azure infrastructure resource group | infrarg           |       |
+| Cert manager request address        | certuser          |       |
 | Cert manager version                | certmgr           |       |
 | DNS zone name                       | dnszone           |       |
 | DNS zone subscription ID            | dnssubscriptionid |       |
@@ -68,7 +69,7 @@ After finishing, the AWX installation will be reachable at `https://[servicename
 
 Check `https://github.com/ansible/awx-operator/tags` for the list of AWX operator versions, and pick the one you want.
 
-Check `https://github.com/cert-manager/cert-manager/tags` for the list of cert-manager versions, and pick the one you want.
+Check `https://github.com/cert-manager/cert-manager/tags` for the list of cert-manager versions, and pick the one you want. Also decide on which mail address you want to register the Let's Encrypt certificates.
 
 Decide on how many replica's you want to run.
 
@@ -78,6 +79,7 @@ Fill in the following line in the info sheet:
 -   `AWX replica count`
 -   `AWX servicename`
 -   `Cert manager version`
+-   `Cert manager request address`
 
 ## Resource groups
 
@@ -155,11 +157,14 @@ Settings not mentioned can be left to the default, or set to your own preference
 
 Note that the version is dependent on the AWX version you want to install. 15 works good for AWX 24.6.1 (latest version available at the monent of writing).
 
+Create a password for the SQL user that's going to do all the work.
+
 Fill in the following lines in the info sheet:
 
 -   `PostgreSQL admin password`
 -   `PostgreSQL admin user`
 -   `PostgreSQL server name`
+-   `PostgreSQL user password`
 
 ## Windows management VM
 
@@ -205,6 +210,22 @@ Open an Ubuntu terminal on the management VM and test if everything works:
 3. Get the AKS credentials: `az aks get-credentials --resource-group [awxrg] --name [kubecluster] --overwrite-existing`
 4. Check access to the cluster: `kubectl get nodes`
 
+## Get the deployment files
+
+Clone the repo: `git clone https://github.com/ildjarnisdead/aks-awx`
+
+Create a copy of the aks-awx directory with the name of your installation (`[servicename]`) and go to this directory.
+
+## Fill in all the config variables
+
+For every config option, use the following bash line to update the values in the deployment files:
+
+```bash
+find . -regex ".*\.\(yaml\|sql\)" -exec sed -i 's/\[configname\]/configvalue/g' {} \+
+```
+
+E.g. `find . -regex ".*\.\(yaml\|sql\)" -exec sed -i 's/\[replicacount\]/2/g' {} \+` to set the replicacount to 2.
+
 ### PostgreSQL
 
 Add the following lines to `~/.profile`:
@@ -220,14 +241,8 @@ Dot-source the profile (`. ~/.profile`) and log in with `psql`. Check the versio
 
 Create the database and database user for your AWX installation, and grant all privileges to the database and the public schema:
 
-```sql
-CREATE DATABASE [servicename];
-CREATE USER [servicename] PASSWORD 'P@ssw0rd.123';
-GRANT CONNECT ON DATABASE [servicename] TO [servicename];
-GRANT ALL PRIVILEGES ON DATABASE [servicename] TO [servicename];
-\c [servicename]
-GRANT ALL PRIVILEGES ON SCHEMA public TO [servicename];
-REVOKE ALL PRIVILEGES ON SCHEMA public FROM public;
+```bash
+psql < database/create-database.sql
 ```
 
 Test the connection: `psql -U [servicename] -d [servicename]`.
@@ -240,22 +255,6 @@ Start the monitoring in the second screen:
 ```bash
 watch kubectl get awx,all,ingress,secrets -n [servicename]
 ```
-
-## Get the deployment files
-
-Clone the repo: `git clone https://github.com/ildjarnisdead/aks-awx`
-
-Create a copy of the aks-awx directory with the name of your installation (`[servicename]`) and go to this directory.
-
-## Fill in all the config variables
-
-For every config option, use the following bash line to update the values in the deployment files:
-
-```bash
-find . -name \*.yaml -exec sed -i 's/\[configname\]/configvalue/' {} \+
-```
-
-E.g. `find . -name \*.yaml -exec sed -i 's/\[replicacount\]/2/' {} \+` to set the replicacount to 2.
 
 ## Cert manager
 

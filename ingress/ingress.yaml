@@ -2,26 +2,26 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: "[servicename]-ingress"
-  namespace: "[servicename]"
-  annotations:
-    cert-manager.io/cluster-issuer: "[dnszone]-clusterissuer"
-    cert-manager.io/acme-challenge-type: dns01
-    appgw.ingress.kubernetes.io/ssl-redirect: "true"
+    name: "[servicename]-ingress"
+    namespace: "[servicename]"
+    annotations:
+        cert-manager.io/cluster-issuer: "[dnszone]-clusterissuer"
+        cert-manager.io/acme-challenge-type: dns01
+        appgw.ingress.kubernetes.io/ssl-redirect: "true"
 spec:
-  ingressClassName: azure-application-gateway
-  tls:
-  - hosts:
-    - "[servicename].[dnszone]"
-    secretName: "[servicename]-certificate"
-  rules:
-  - host: "[servicename].[dnszone]"
-    http:
-      paths:
-        - pathType: ImplementationSpecific
-          path: "/"
-          backend:
-            service:
-              name: "[servicename]-service"
-              port:
-                number: 80
+    ingressClassName: azure-application-gateway
+    tls:
+        - hosts:
+              - "[servicename].[dnszone]"
+          secretName: "[servicename]-certificate"
+    rules:
+        - host: "[servicename].[dnszone]"
+          http:
+              paths:
+                  - pathType: ImplementationSpecific
+                    path: "/"
+                    backend:
+                        service:
+                            name: "[servicename]-service"
+                            port:
+                                number: 80
